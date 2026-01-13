@@ -1,0 +1,20 @@
+services:
+  database:
+    image: ekumbu/qclock-db:latest
+    environment:
+      MYSQL_DATABASE: qclock_db
+      MYSQL_ROOT_PASSWORD: root_secure_pass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  web-app:
+    image: ekumbu/qclock-app:latest
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: database
+    depends_on:
+      - database
+
+volumes:
+  db_data:  
