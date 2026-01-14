@@ -1,0 +1,28 @@
+{
+  "realm": "qclock-realm",
+  "enabled": true,
+  "users": [
+    {
+      "username": "ekumbu",
+      "enabled": true,
+      "firstName": "Ezechias",
+      "lastName": "KUMBU KUMBU",
+      "credentials": [{ "type": "password", "value": "Rawbank2026!", "temporary": false }],
+      "realmRoles": ["admin", "super-user"]
+    },
+    {
+      "username": "dmbassa",
+      "enabled": true,
+      "firstName": "Donald",
+      "lastName": "MBASSA",
+      "credentials": [{ "type": "password", "value": "Manager2026!", "temporary": true }],
+      "realmRoles": ["manager"]
+    }
+  ],
+  "roles": {
+    "realm": [
+      { "name": "super-user" },
+      { "name": "manager" }
+    ]
+  }
+}

@@ -1,19 +1,30 @@
 #!/bin/bash
+# 'set -e' arrête le script si une commande échoue
 set -e
 
-echo "🚀 Démarrage du Stack Applicatif..."
+echo "--------------------------------------------------"
+echo "🚀 INITIALISATION DU DASHBOARD QCLOCK (RAWBANK)"
+echo "--------------------------------------------------"
 
-# 1. Préparation du dossier pour le socket PHP-FPM
-# On s'assure qu'il existe, sinon PHP-FPM refuse de démarrer
-if [ ! -d /run/php-fpm ]; then
-    mkdir -p /run/php-fpm
-fi
+# 1. Nettoyage et préparation des répertoires de runtime
+# Obligatoire pour éviter les erreurs de lock au redémarrage
+rm -rf /run/httpd/* /run/php-fpm/*
+mkdir -p /run/php-fpm
+mkdir -p /run/httpd
 
-# 2. Démarrage de PHP-FPM en arrière-plan (Daemon)
-echo "🐘 Démarrage de PHP-FPM..."
-php-fpm -D
+# 2. Vérification de la connectivité DB (Optionnel mais recommandé)
+# Cela évite que l'app crash si la DB n'est pas encore prête
+echo "⏳ Attente de la base de données..."
+sleep 2 
 
-# 3. Démarrage d'Apache en avant-plan (Bloquant)
-# C'est ce processus qui garde le conteneur en vie
-echo "🔥 Démarrage d'Apache..."
-httpd -D FOREGROUND
+# 3. Démarrage de PHP-FPM
+# On utilise le chemin complet pour éviter les erreurs de variable d'environnement
+echo "🐘 Lancement de PHP-FPM..."
+/usr/sbin/php-fpm -D
+
+# 4. Démarrage d'Apache
+# On utilise 'exec' pour que httpd devienne le PID 1 du conteneur
+# C'est la méthode "pro" pour une gestion propre des signaux Docker (stop/restart)
+echo "🔥 Apache est en ligne (Port 80)"
+echo "--------------------------------------------------"
+exec /usr/sbin/httpd -D FOREGROUND

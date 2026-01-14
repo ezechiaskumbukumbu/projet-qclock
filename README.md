@@ -134,11 +134,41 @@ Docker Compose (v2+)
 
 Accès Internet (CDN UI)
 
-6.2 Procédure de Déploiement (Full Reset)
+6. Spécifications Techniques
+Composant	Technologie	Justification
+OS Base	Oracle Linux 9	Support entreprise long terme
+Front-end	Tailwind CSS	Performance et agilité
+Web Server	Apache 2.4	Robustesse éprouvée
+Runtime	PHP 8.2	Stabilité et compatibilité
+Base de données	MySQL 8.0	Fiabilité et performance
+
+7. Structure du Repository
+projet-qclock/
+├── docker-compose.yml      # Orchestration, réseaux, volumes
+├── images/
+│   ├── base/               # Image OS durcie
+│   ├── app/                # Apache + PHP-FPM
+│   └── db/                 # MySQL sécurisé
+├── src/                    # Code source du Dashboard
+├── scripts/                # Scripts de build et d’automatisation
+└── README.md               # Documentation principale
+
+
+9. Procédure de Déploiement (Full Reset)
+
+# 0. Forcer le téléchargement des images de sécurité
+docker pull postgres:15
+docker pull quay.io/keycloak/keycloak:23.0
+
 # 1. Arrêt complet et purge des volumes
 docker compose down -v
 
 # 2. Build complet du stack (base → app → db)
+# Force les permissions exécutables sur le script d'entrée de la DB
+chmod +x images/db/docker-entrypoint.sh
+# Nettoie les éventuels caractères Windows invisibles
+sed -i 's/\r$//' images/db/docker-entrypoint.sh
+
 chmod +x scripts/build-all.sh
 ./scripts/build-all.sh
 
@@ -150,27 +180,18 @@ echo "Initialisation des services..."
 sleep 10
 
 # 5. Vérification de la disponibilité
+# Tester Keycloak (Port 8443)
+curl -I http://localhost:8081/auth  
+# Tester l'App (Port 8080)
 curl -I http://localhost:8080
 
-7. Spécifications Techniques
-Composant	Technologie	Justification
-OS Base	Oracle Linux 9	Support entreprise long terme
-Front-end	Tailwind CSS	Performance et agilité
-Web Server	Apache 2.4	Robustesse éprouvée
-Runtime	PHP 8.2	Stabilité et compatibilité
-Base de données	MySQL 8.0	Fiabilité et performance
-8. Structure du Repository
-projet-qclock/
-├── docker-compose.yml      # Orchestration, réseaux, volumes
-├── images/
-│   ├── base/               # Image OS durcie
-│   ├── app/                # Apache + PHP-FPM
-│   └── db/                 # MySQL sécurisé
-├── src/                    # Code source du Dashboard
-├── scripts/                # Scripts de build et d’automatisation
-└── README.md               # Documentation principale
+11. Demarrage tout à froid : 
 
-9. Maintenance & Ownership
+docker compose down -v
+docker build -t qclock-app:latest -f images/app/Dockerfile .
+docker compose up -d
+
+ Maintenance & Ownership
 
 Auteur / Mainteneur
 Ezechias KUMBU KUMBU

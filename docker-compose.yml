@@ -1,35 +1,52 @@
-version: '3.8'
-
 services:
   database:
     image: qclock-db:latest
     container_name: qclock-db-container
-    user: root
-    command: ["mysqld", "--user=mysql", "--skip-name-resolve"]
+    build:
+      context: .
+      dockerfile: images/db/Dockerfile
     environment:
-      - MYSQL_ROOT_PASSWORD=rawbank_admin
-      - MYSQL_DATABASE=qclock_db
-      - TZ=Africa/Kinshasa
-    networks:
-      - qclock-network
+      MYSQL_ROOT_PASSWORD: qclock_db_password
+      MYSQL_DATABASE: qclock_monitoring
+    volumes:
+      - qclock_db_data:/var/lib/mysql
+      # Montage vital : tout script .sql ici sera exécuté au premier démarrage
+      - ./images/db/init:/docker-entrypoint-initdb.d
+    cap_add:
+      - SYS_NICE 
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-pqclock_db_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
 
-  web-app:
-    image: qclock-app:latest
+  qclock-app:
+    build: 
+      context: .
+      dockerfile: images/app/Dockerfile
     container_name: qclock-app-container
     ports:
-      - "8080:80"
-    # SYNCHRONISATION DU CODE : Permet de voir les modifs sans rebuild
-    volumes:
-      - ./src:/var/www/html
-    environment:
-      - TZ=Africa/Kinshasa
+      - "80:80"
     depends_on:
-      - database
-    networks:
-      - qclock-network
+      database:
+        condition: service_healthy
+    environment:
+      DB_HOST: database
+      DB_NAME: qclock_monitoring
+      DB_PASS: qclock_db_password
     restart: always
 
-networks:
-  qclock-network:
-    driver: bridge
+  qclock-auth:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: qclock-auth-provider
+    command: start-dev
+    ports:
+      - "8081:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    restart: always
+
+volumes:
+  qclock_db_data:
