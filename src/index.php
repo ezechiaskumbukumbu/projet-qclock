@@ -3,84 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rawbank | QClock Enterprise</title>
+    <title>Rawbank | Monitoring QClock</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'raw-blue': '#003366',
+                        'raw-red': '#E30613',
+                        'raw-gray': '#F4F7F9'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-slate-50">
-    <nav class="bg-[#003366] text-white shadow-xl p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-red-600 p-2 rounded">
-                    <i class="fas fa-shield-alt text-xl"></i>
-                </div>
-                <span class="text-xl font-bold tracking-widest">RAWBANK <span class="text-red-500 italic">QCLOCK</span></span>
-            </div>
-            <div class="hidden md:block text-sm font-light italic">Core Banking Monitoring System v1.0</div>
-        </div>
-    </nav>
+<body class="bg-raw-gray font-sans text-slate-800">
 
-    <main class="container mx-auto py-10 px-6">
-        <div class="mb-8">
-            <h2 class="text-3xl font-extrabold text-slate-800">État du Système</h2>
-            <p class="text-slate-500 text-lg">Vérification en temps réel de l'infrastructure bancaire.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="bg-white rounded-2xl p-6 shadow-sm border-b-4 border-green-500 hover:shadow-lg transition-shadow">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-semibold text-slate-400 uppercase">Apache Status</p>
-                        <h3 class="text-2xl font-bold text-slate-800 mt-1">Operational</h3>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-check text-green-600"></i></div>
+    <header class="bg-white border-b-4 border-raw-red shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="text-raw-blue font-black text-3xl tracking-tighter">
+                    RAWBANK<span class="text-raw-red font-light">.</span>
                 </div>
+                <div class="h-8 w-px bg-slate-200 mx-4 hidden md:block"></div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest hidden md:block">QClock Monitoring</span>
             </div>
             
-            <div class="bg-white rounded-2xl p-6 shadow-sm border-b-4 border-blue-500 hover:shadow-lg transition-shadow">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-semibold text-slate-400 uppercase">Local Time (Kinshasa)</p>
-                        <h3 class="text-2xl font-bold text-slate-800 mt-1"><?php echo date('H:i:s'); ?></h3>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full"><i class="far fa-clock text-blue-600"></i></div>
+            <div class="flex items-center space-x-6">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">Serveur Node</p>
+                    <p class="text-xs font-mono text-raw-blue"><?php echo gethostname(); ?></p>
                 </div>
-            </div>
-
-            <div class="bg-white rounded-2xl p-6 shadow-sm border-b-4 border-red-500 hover:shadow-lg transition-shadow">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-semibold text-slate-400 uppercase">Database Link</p>
-                        <h3 class="text-2xl font-bold text-slate-800 mt-1">Secured</h3>
-                    </div>
-                    <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-database text-red-600"></i></div>
+                <div class="bg-raw-blue text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-blue-900/20">
+                    SÉCURISÉ
                 </div>
             </div>
         </div>
+    </header>
 
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div class="bg-slate-800 p-6">
-                <h3 class="text-white font-bold text-lg">Audit Technique du Stack</h3>
+    <main class="container mx-auto px-6 py-12">
+        <div class="bg-raw-blue rounded-[2.5rem] p-12 text-white relative overflow-hidden mb-12 shadow-2xl">
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0">
+                    <h2 class="text-4xl font-bold mb-2 italic">Bonjour, Ezechias</h2>
+                    <p class="text-blue-200 text-lg">Bienvenue sur votre console de monitoring temps réel.</p>
+                </div>
+                <div class="text-center bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+                    <p class="text-xs uppercase tracking-[0.3em] text-blue-300 font-bold mb-2">Heure de Kinshasa</p>
+                    <div class="text-6xl font-black tabular-nums tracking-tighter">
+                        <?php echo date('H:i:s'); ?>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-red-400 uppercase tracking-widest"><?php echo date('d F Y'); ?></p>
+                </div>
             </div>
-            <div class="p-8">
-                <table class="w-full">
-                    <thead>
-                        <tr class="text-left text-slate-400 text-sm border-b">
-                            <th class="pb-4">Module Enterprise</th>
-                            <th class="pb-4">Statut de Conformité</th>
-                            <th class="pb-4">Version/Info</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y">
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="py-5 font-bold text-slate-700">PHP Extension: PDO_MYSQL</td>
-                            <td><span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase"><?php echo extension_loaded('pdo_mysql') ? 'Validé' : 'Erreur'; ?></span></td>
-                            <td class="text-slate-500 text-sm">Critical for Data Persistence</td>
-                        </tr>
-                        </tbody>
-                </table>
+            <div class="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+                <i class="fas fa-landmark text-[25rem]"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-slate-100 p-4 rounded-2xl text-raw-blue"><i class="fas fa-server text-xl"></i></div>
+                    <h3 class="font-bold text-lg">Web Server</h3>
+                </div>
+                <div class="flex items-center text-green-600 font-bold">
+                    <span class="flex h-3 w-3 mr-3"><span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
+                    Apache 2.4 (OL9)
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all text-nowrap">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-slate-100 p-4 rounded-2xl text-raw-red"><i class="fas fa-database text-xl"></i></div>
+                    <h3 class="font-bold text-lg">Base de données</h3>
+                </div>
+                <div class="text-slate-600 font-medium">
+                    <i class="fas fa-link mr-2 text-blue-500"></i>MySQL 8.0 Connecté
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-slate-100 p-4 rounded-2xl text-blue-500"><i class="fas fa-shield-virus text-xl"></i></div>
+                    <h3 class="font-bold text-lg">Santé Stack</h3>
+                </div>
+                <div class="text-slate-600 font-medium">
+                    <?php echo extension_loaded('pdo_mysql') ? '✅ Extensions Validées' : '❌ Erreur Drivers'; ?>
+                </div>
             </div>
         </div>
     </main>
+
+    <footer class="container mx-auto px-6 py-8 mt-12 border-t border-slate-200">
+        <div class="flex flex-col md:flex-row justify-between items-center text-slate-400 text-sm italic">
+            <p>&copy; 2026 Rawbank IT Delivery. Tout droit réservé.</p>
+            <p class="mt-4 md:mt-0 font-bold text-raw-blue">RAWBANK - Ma banque, ma liberté.</p>
+        </div>
+    </footer>
+
 </body>
 </html>

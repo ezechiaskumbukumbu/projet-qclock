@@ -9,6 +9,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=rawbank_admin
       - MYSQL_DATABASE=qclock_db
+      - TZ=Africa/Kinshasa
     networks:
       - qclock-network
     restart: always
@@ -18,6 +19,11 @@ services:
     container_name: qclock-app-container
     ports:
       - "8080:80"
+    # SYNCHRONISATION DU CODE : Permet de voir les modifs sans rebuild
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - TZ=Africa/Kinshasa
     depends_on:
       - database
     networks:
