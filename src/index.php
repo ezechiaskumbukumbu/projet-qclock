@@ -1,17 +1,18 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 echo "<h1>🚀 Projet QClock : Stack Enterprise Opérationnel</h1>";
 echo "<p><b>Serveur :</b> " . gethostname() . "</p>";
-echo "<p><b>OS Base :</b> Oracle Linux 9 (Slim)</p>";
 
-// Test des extensions critiques pour la banque
 echo "<h2>🔍 Audit des Drivers :</h2>";
-$extensions = ['pdo_mysql', 'oci8', 'mysqli'];
+$extensions = ['pdo_mysql', 'mysqli'];
 
-foreach (\$extensions as \$ext) {
-    if (extension_loaded(\$ext)) {
-        echo "✅ Extension <b>\$ext</b> : Installée<br>";
+foreach ($extensions as $ext) {
+    if (extension_loaded($ext)) {
+        echo "✅ Extension <b>$ext</b> : Installée<br>";
     } else {
-        echo "❌ Extension <b>\$ext</b> : <span style='color:red'>Manquante</span><br>";
+        echo "❌ Extension <b>$ext</b> : <span style='color:red'>Manquante</span><br>";
     }
 }
 

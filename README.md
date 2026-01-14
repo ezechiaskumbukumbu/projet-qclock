@@ -86,6 +86,22 @@ projet-qclock/
 | **Connectivité** | OCI8 / Oracle IC | Communication native avec le Core Banking |
 
 ---
+Lancement du project
+======================
+# 1. On arrête tout et on supprime les volumes (données DB corrompues)
+docker compose down -v
+
+# 2. On rebuild les images pour intégrer le script de démarrage PHP-FPM
+./scripts/build-all.sh
+
+# 3. On lance
+docker compose up -d
+
+# 4. On attend 10 secondes que MySQL s'initialise
+sleep 10
+
+# 5. On vérifie la page
+curl -I http://localhost:8080
 
 ## 👤 Contact & Maintenance
 

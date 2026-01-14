@@ -1,0 +1,15 @@
+# Docker data
+mysql_data/
+.docker-desktop/
+
+# Logs
+*.log
+images/app/logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

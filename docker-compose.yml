@@ -1,17 +1,18 @@
 version: '3.8'
 
 services:
-  # Base de données (MySQL installé manuellement)
   database:
     image: qclock-db:latest
     container_name: qclock-db-container
+    user: root
+    command: ["mysqld", "--user=mysql", "--skip-name-resolve"]
     environment:
       - MYSQL_ROOT_PASSWORD=rawbank_admin
       - MYSQL_DATABASE=qclock_db
     networks:
       - qclock-network
+    restart: always
 
-  # Application Web (Apache/PHP/Oracle)
   web-app:
     image: qclock-app:latest
     container_name: qclock-app-container
@@ -21,6 +22,7 @@ services:
       - database
     networks:
       - qclock-network
+    restart: always
 
 networks:
   qclock-network:
