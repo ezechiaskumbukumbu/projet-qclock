@@ -1,18 +1,17 @@
 FROM qclock-base:latest
 
-# Installation du serveur MySQL
-RUN microdnf install -y mysql-server &&     microdnf clean all
+RUN microdnf install -y mysql-server && \
+    microdnf clean all
 
-# Configuration pour accepter les connexions réseau
-RUN echo -e "[mysqld]\nbind-address = 0.0.0.0\nskip-networking = 0" > /etc/my.cnf.d/remote.cnf
+RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
+    chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 
-# Préparation du répertoire de données
-RUN mkdir -p /var/lib/mysql && chown -m mysql:mysql /var/lib/mysql
+RUN echo -e "[mysqld]\nbind-address=0.0.0.0" > /etc/my.cnf.d/remote.cnf
 
-# Initialisation de la base de données (système)
-RUN mysqld --initialize-insecure --user=mysql
+COPY images/db/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3306
 
-# On lance MySQL en mode safe
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["mysqld", "--user=mysql"]

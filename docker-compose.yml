@@ -1,20 +1,27 @@
-services:
-  database:
-    image: ekumbu/qclock-db:latest
-    environment:
-      MYSQL_DATABASE: qclock_db
-      MYSQL_ROOT_PASSWORD: root_secure_pass
-    volumes:
-      - db_data:/var/lib/mysql
+version: '3.8'
 
+services:
+  # Base de données (MySQL installé manuellement)
+  database:
+    image: qclock-db:latest
+    container_name: qclock-db-container
+    environment:
+      - MYSQL_ROOT_PASSWORD=rawbank_admin
+      - MYSQL_DATABASE=qclock_db
+    networks:
+      - qclock-network
+
+  # Application Web (Apache/PHP/Oracle)
   web-app:
-    image: ekumbu/qclock-app:latest
+    image: qclock-app:latest
+    container_name: qclock-app-container
     ports:
       - "8080:80"
-    environment:
-      DB_HOST: database
     depends_on:
       - database
+    networks:
+      - qclock-network
 
-volumes:
-  db_data:  
+networks:
+  qclock-network:
+    driver: bridge

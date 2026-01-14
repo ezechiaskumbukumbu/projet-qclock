@@ -12,6 +12,6 @@ qclock-enterprise/
 ├── src/
 │   └── index.php
 ├── scripts/
-│   └── build-and-push.sh
+│   └── build-all.sh
 ├── docker-compose.yml
 └── README.md
